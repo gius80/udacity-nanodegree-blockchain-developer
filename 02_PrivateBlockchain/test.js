@@ -1,9 +1,10 @@
 const simpleChain = require('./simpleChain');
+const block = require('./block');
 const myBlockChain = new simpleChain.Blockchain();
 
 (function theLoop(i) {
   setTimeout(() => {
-    let blockTest = new simpleChain.Block(`Test Block ${i + 1}`);
+    let blockTest = new block.Block(`Test Block ${i + 1}`);
     myBlockChain.addBlock(blockTest).then((result) => {
       console.log(result);
       i++;
