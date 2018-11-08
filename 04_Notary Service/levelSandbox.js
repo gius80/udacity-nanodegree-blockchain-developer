@@ -39,6 +39,50 @@ class LevelSandbox {
     });
   }
 
+  // Get data from levelDB by address
+  getLevelDBDataByAddress(address) {
+    return new Promise((resolve, reject) => {
+      const dataFound = [];
+      this.db.createReadStream()
+        .on('data', (data) => {
+          console.log(address + ' ' + JSON.parse(data.value).body.address);
+          if (JSON.parse(data.value).body.address === address) {
+            dataFound.push(JSON.parse(data.value));
+          }
+        }).on('error', (err) => {
+          reject(err);
+        }).on('close', () => {
+          console.log(dataFound);
+          if (dataFound) {
+            resolve(dataFound);
+          } else {
+            reject(new Error('Block not found'));
+          }
+        });
+    });
+  }
+
+  // Get data from levelDB by hash
+  getLevelDBDataByHash(hash) {
+    return new Promise((resolve, reject) => {
+      let dataFound;
+      this.db.createReadStream()
+        .on('data', (data) => {
+          console.log(hash + ' ' + JSON.parse(data.value).hash);
+          if (JSON.parse(data.value).hash === hash) dataFound = JSON.parse(data.value);
+        }).on('error', (err) => {
+          reject(err);
+        }).on('close', () => {
+          console.log(dataFound);
+          if (dataFound) {
+            resolve(dataFound);
+          } else {
+            reject(new Error('Block not found'));
+          }
+        });
+    });
+  }
+
   // Return the number of block inside chaindata
   getBlockCount() {
     return new Promise((resolve, reject) => {
