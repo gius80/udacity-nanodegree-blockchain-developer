@@ -161,7 +161,7 @@ router.post('/', async (req, res) => {
       if (!Util.validateASCII(star.story)) {
         isMessageValid = false;
         status = 400;
-        response = { error: 'Invalid ASCII chars in story' };
+        response = { error: 'Only ASCII chars allowed' };
       }
       if (!Util.validateMessageSize(star.story)) {
         isMessageValid = false;
