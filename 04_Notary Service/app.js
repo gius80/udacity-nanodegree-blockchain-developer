@@ -11,7 +11,7 @@ const Block = require('./block');
 const Util = require('./util');
 
 const PORT = 8000;
-const VALIDATION_WINDOW = 30;
+const VALIDATION_WINDOW = 300;
 
 const blockChain = new Blockchain.Blockchain();
 const app = express();
