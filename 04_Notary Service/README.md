@@ -223,7 +223,7 @@ Get an existent block by address
 #### Success Response
 ```
 Code: 200
-Content: {
+Content: [{
   "hash": [string],
   "height": 1,
   "body": {
@@ -236,7 +236,7 @@ Content: {
   },
   "time": [string],
   "previousBlockHash": [string]
-}
+  },]
 ```
 #### Error Response - Block not found
 ```

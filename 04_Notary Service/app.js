@@ -11,7 +11,7 @@ const Block = require('./block');
 const Util = require('./util');
 
 const PORT = 8000;
-const VALIDATION_WINDOW = 20;
+const VALIDATION_WINDOW = 30;
 
 const blockChain = new Blockchain.Blockchain();
 const app = express();
@@ -116,7 +116,7 @@ app.post('/message-signature/validate', (req, res) => {
               requestTimeStamp,
               message,
               validationWindow: VALIDATION_WINDOW - delta,
-              messageSignature: 'valid',
+              messageSignature: 'invalid',
             },
           };
         }
@@ -194,10 +194,15 @@ router.post('/', async (req, res) => {
 
 // Endpoint GET /stars:address:[address]
 routerStars.get('/address::address', async (req, res) => {
-  let block = {};
+  let block = [];
   try {
     block = await blockChain.getBlockByAddress(req.params.address);
-    res.status(200);
+    if (block.length < 1) {
+      res.status(404);
+      block = { error: 'Block not found' };
+    } else {
+      res.status(200);
+    }
   } catch (error) {
     res.status(404);
     block.error = 'Block not found';
