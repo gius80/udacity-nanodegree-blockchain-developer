@@ -40,7 +40,7 @@ app.post('/requestValidation', (req, res) => {
       // Checking if the validation time is still valid
       if (delta < VALIDATION_WINDOW) { // validation window is valid
         // Read timestamp from mempool
-        ({ timestamp } = mempool[address].timestamp);
+        ({ timestamp } = mempool[address]);
       } else { // validation window is expired
         // Reset timestamp
         mempool[address].timestamp = timestamp;
@@ -140,6 +140,7 @@ router.get('/:index', async (req, res) => {
   let status = 200;
   try {
     response = await blockChain.getBlock(req.params.index);
+    response.body.star.storyDecoded = Buffer.from(response.body.star.story, 'hex').toString('ascii');
     status = 200;
   } catch (error) {
     res.status(404);
@@ -201,6 +202,9 @@ routerStars.get('/address::address', async (req, res) => {
       res.status(404);
       block = { error: 'Block not found' };
     } else {
+      for (let i = 0; i < block.length; i++) {
+        block[i].body.star.storyDecoded = Buffer.from(block[i].body.star.story, 'hex').toString('ascii');
+      }
       res.status(200);
     }
   } catch (error) {
@@ -215,6 +219,7 @@ routerStars.get('/hash::hash', async (req, res) => {
   let block = {};
   try {
     block = await blockChain.getBlockByHash(req.params.hash);
+    block.body.star.storyDecoded = Buffer.from(block.body.star.story, 'hex').toString('ascii');
     res.status(200);
   } catch (error) {
     res.status(404);
