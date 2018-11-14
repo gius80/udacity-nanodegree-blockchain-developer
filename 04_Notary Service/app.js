@@ -138,9 +138,12 @@ const routerStars = express.Router();
 router.get('/:index', async (req, res) => {
   let response = {};
   let status = 200;
+  const { index } = req.params;
   try {
-    response = await blockChain.getBlock(req.params.index);
-    response.body.star.storyDecoded = Buffer.from(response.body.star.story, 'hex').toString('ascii');
+    response = await blockChain.getBlock(index);
+    if (index > 0) {
+     response.body.star.storyDecoded = Buffer.from(response.body.star.story, 'hex').toString('ascii');
+    }
     status = 200;
   } catch (error) {
     res.status(404);
